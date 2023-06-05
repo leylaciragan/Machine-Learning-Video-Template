@@ -1,0 +1,121 @@
+\documentclass[12, t, aspectratio=169]{beamer}
+    %final  % TODO: use this option for final version
+
+\usepackage{graphicx} % Required for inserting images
+\usepackage{theme/ml}
+\usepackage[
+    style=authoryear  % use your preferred citation
+]{biblatex}
+\addbibresource{xampl.bib}  % BibTeX-file for bibliography
+
+
+\author{Prof. Frieda Friedlich}
+\gender{f}  % (needed for last slide: Speaker)
+\institute{University of XY, Institute XY}  % Use University only, if not UZH
+
+
+\begin{document}
+
+% at the beginning of each lecture:
+\kapitel{1}{Lecture Title}
+\lektion{Lesson Title}
+\authorframe
+
+\begin{videoframe}
+    \begin{longsidebar}
+        For slides with little text:
+        \begin{enumerate}
+            \item use \textit{videoframe}
+            \item use \textit{longsidebar}
+            \item Lists with \textit{itemize} or \textit{enumerate}
+        \end{enumerate}
+    \end{longsidebar}
+\end{videoframe}
+
+\begin{videoframe}
+    \begin{longsidebar}
+        \sidebarimage{example-image}
+        \textbf{\textit{longsidebar}:} \\
+        For slides with images and little text
+    \end{longsidebar}
+\end{videoframe}
+
+\begin{videoframe}
+    \begin{longsidebar}
+        \sidebarimage{example-image-a}
+        \sidebarimage{example-image-b}
+    \end{longsidebar}
+\end{videoframe}
+
+\begin{videoframe}
+    \begin{longsidebar}
+        \sidebarimages{example-image-a}{example-image-b}
+        \textbf{For several images:}
+        \begin{itemize}
+            \item below each other: \textit{\textbackslash sidebarimage}
+            \item next to each other: \textit{\textbackslash sidebarimages}
+        \end{itemize}
+    \end{longsidebar}
+\end{videoframe}
+
+\begin{frame}
+    \begin{horizontalbar}[Title (optional)]
+        Possibility to have a short sentence on the first row\\
+        Maybe a second row
+    \end{horizontalbar}
+\end{frame}
+
+\begin{frame}
+    \frametitle{This is a title}
+    Here is space for:
+    \begin{itemize}
+        \item longer content
+        \begin{itemize}
+            \item texts
+            \item lists
+        \end{itemize}
+        \item images
+        \item graphics
+        \item handwriting
+        \item etc.
+    \end{itemize}
+\end{frame}
+
+\imageframe{example-image}
+
+\begin{frame}
+    \frametitle{table title}
+    \begin{tabularx}{\textwidth}{|X|X|X|}
+        \firstrow
+        \textbf{Lorem} & \textbf{Ipsum} & \textbf{Lorem ipsum} \rowend
+        Nati & Versipit & Iam \rowend
+        Dolutatust & Pilatetem & Incid \rowend
+        Ercipti & Esector & Natium \rowend
+        Versipit & Litatem & Incid \rowend
+    \end{tabularx}
+\end{frame}
+
+%%%%%%%%
+
+% vor jeder neuen Lektion:
+\lektion{Lesson Name}
+
+\begin{frame}
+    \frametitle{Citation Example}
+    \begin{itemize}
+        \item \cite{article-minimal}
+        \item \cite[46]{book-full}
+        \item \cite[32--35]{inproceedings-crossref}
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%
+
+% at the end of each lesson:
+\begin{frame}
+    \frametitle{References}
+    \printbibliography
+\end{frame}
+\finalframe
+
+\end{document}

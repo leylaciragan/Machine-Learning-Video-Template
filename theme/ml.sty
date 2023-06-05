@@ -1,0 +1,282 @@
+\mode<presentation>
+
+\RequirePackage[ngerman]{babel}
+\RequirePackage{helvet}
+\RequirePackage[absolute,overlay]{textpos}
+\RequirePackage{calc}
+\RequirePackage{ifthen}
+\RequirePackage{ifdraft}
+\RequirePackage{textcomp}
+\RequirePackage{colortbl}
+\RequirePackage{tabularx}
+
+% 1 TPModule = 1 cm in the PPT template
+\setlength{\TPHorizModule}{0.03937007874\paperwidth}
+\setlength{\TPVertModule}{0.06997900629\paperheight}
+
+\setbeamersize{text margin left=1.83\TPHorizModule}
+\setbeamersize{text margin right=1.93\TPVertModule}
+
+
+% COMMANDS %
+
+\newcommand{\gender}[1]{
+    \def\@gender{#1}
+}
+
+\newenvironment{textbox}[3]{
+    \begin{textblock}{#1}(#2,#3)
+        \vspace{0.3\TPVertModule}
+}{
+    \end{textblock}
+}
+
+\newcommand{\kapitel}[2]{
+    \def\@kapitelnr{#1}
+    \def\@kapiteltitle{#2}
+    \setcounter{section}{0}
+    \usebeamertemplate{uzhlogo}
+    \frame{}
+    \usebeamertemplate{title page}
+    \frame{}
+}
+\def\@title{\textbf{VL \@kapitelnr:} \@kapiteltitle}
+\newcommand{\lektion}[2][]{
+    \def\tmp{#1}
+    \ifx\tmp\empty
+        \stepcounter{section}
+    \else
+        \setcounter{section}{\tmp}
+    \fi
+    \def\thesection{#2}
+    \usebeamertemplate{section page}
+    \frame{}
+}
+
+\newcommand{\authorframe}{
+    \begin{videoframe}
+        \authorpage
+    \end{videoframe}
+}
+\newcommand{\authorpage}{
+    \begin{textblock}{25.4}(0,9.28)
+        \pgfsetfillopacity{0.4}
+        \begin{beamercolorbox}[wd=\paperwidth,ht=3.45\TPVertModule]{authorbar}
+        \end{beamercolorbox}
+        \pgfsetfillopacity{1}
+    \end{textblock}
+    \begin{textbox}{22.25}{1.85}{9.5}
+        \large
+        \textbf{\insertauthor} \\
+        \insertinstitute
+    \end{textbox}
+}
+
+\newenvironment{videoframe}{
+    \usebeamertemplate{video background}
+    \begin{frame}
+}{
+    \end{frame}
+    \setbeamercolor{background canvas}{bg=white}
+}
+
+\newenvironment{sidebar}{
+    \def\@sidebartext{true}
+    \begin{textblock}{9.30}(16.10,1.94)
+        \begin{beamercolorbox}[wd=9.30\TPHorizModule,sep=0.5\TPHorizModule]{sidebar}
+            \vskip0.1\TPVertModule
+}{
+        \end{beamercolorbox}
+    \end{textblock}
+}
+
+\newenvironment{longsidebar}{
+    \def\@sidebartext{}
+    \begin{textblock}{9.30}(16.10,0.00)
+        \begin{beamercolorbox}[wd=9.30\TPHorizModule,dp=14.27\TPVertModule,sep=0.5\TPHorizModule]{sidebar}
+            \vskip0.6\TPVertModule
+}{
+        \end{beamercolorbox}
+    \end{textblock}
+}
+
+\newlength{\oW}
+\newlength{\oH}
+\newlength{\rW}
+\newlength{\rH}
+\newlength{\cWH}
+\newcommand\fillimage[3]{% width, height, image
+  \settototalheight{\oH}{\includegraphics{#3}}%
+  \settowidth{\oW}{\includegraphics{#3}}%
+  \setlength{\rW}{\oW * \ratio{#2}{\oH}}%
+  \ifthenelse{\lengthtest{\rW < #1}}{%
+    % image too high -> clip height
+    \setlength{\rH}{\oH * \ratio{#1}{\oW}}%
+    \setlength{\cWH}{(\rH-#2) * \ratio{\oW}{#1} * \ratio{1cm}{2cm}}%
+    \includegraphics[width=#1,clip,trim=0 \cWH{} 0 \cWH{}]{#3}%
+  }{%
+    % image too wide -> clip width
+    \setlength{\cWH}{(\rW-#1) * \ratio{\oH}{#2} * \ratio{1cm}{2cm}}%
+    \includegraphics[height=#2,clip,trim=\cWH{} 0 \cWH{} 0]{#3}%
+  }%
+}
+
+\newcommand{\sidebarimage}[1]{%
+    \includegraphics[width=8.30\TPHorizModule]{#1}%
+    \vspace{0.4\TPVertModule}%
+}
+
+\newcommand{\sidebarimages}[3][3.94]{%
+    \fillimage{3.90\TPHorizModule}{#1\TPHorizModule}{#2}%
+    \hfill%
+    \fillimage{3.90\TPHorizModule}{#1\TPVertModule}{#3}%
+    \vspace{0.4\TPVertModule}%
+}
+
+\newenvironment{horizontalbar}[1][]{
+    \begin{textblock}{25.40}(0,2.00)
+        \pgfsetfillopacity{0.35}
+        \begin{beamercolorbox}[wd=25.40\TPHorizModule,ht=5.87\TPVertModule]{shadow}
+        \end{beamercolorbox}
+        \pgfsetfillopacity{1}
+    \end{textblock}
+    \begin{textblock}{25.40}(0,1.94)
+        \begin{beamercolorbox}[wd=25.40\TPHorizModule,ht=5.87\TPVertModule]{horizontalbar}
+        \end{beamercolorbox}
+    \end{textblock}
+    \begin{textbox}{22.9}{2.25}{2.19}
+        {\large\textbf{#1}} \\[1ex]
+}{
+    \end{textbox}
+}
+
+\newcommand{\imageframe}[1]{
+    \begin{frame}
+        \begin{textblock}{25.40}(0,0)
+            \fillimage{\paperwidth}{\paperheight}{#1}
+        \end{textblock}
+    \end{frame}
+}
+
+\newcommand{\rowend}{\\[1.5ex] \hline}
+\newcommand{\firstrow}{\hline \rowcolor{tablebg}}
+
+\newcommand{\finalframe}{
+    \begin{frame}
+        \begin{textbox}{20.22}{3.90}{2.75}
+            \large
+            \ifthenelse{\equal{\@gender}{f}}{
+                \textbf{Referentin}
+            }{
+                \textbf{Referent}
+            } \\
+            \insertauthor \\
+            \insertinstitute \\[4ex]
+            \textbf{\textcopyright{} Universität Zürich} \\
+            Digital Society Initiative
+        \end{textbox}
+    \end{frame}
+}
+
+
+% COLORS %
+
+\definecolor{videobg}{HTML}{EBEAE0}
+\definecolor{barbg}{HTML}{CFCFC7}
+\definecolor{tablebg}{HTML}{D9D9D9}
+\setbeamercolor{videobg}{bg=videobg}
+\setbeamercolor{authorbar}{bg=white}
+\setbeamercolor{sidebar}{bg=barbg}
+\setbeamercolor{horizontalbar}{bg=barbg}
+\setbeamercolor{shadow}{bg=black}
+
+\setbeamercolor{frametitle}{fg=black}
+\setbeamercolor{item}{fg=black}
+\setbeamercolor{bibliography entry article}{fg=black}
+\setbeamercolor{bibliography entry title}{fg=black}
+\setbeamercolor{bibliography entry author}{fg=black}
+\setbeamercolor{bibliography entry location}{fg=black}
+\setbeamercolor{bibliography entry note}{fg=black}
+
+
+% FONTS %
+
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamerfont{itemize/enumerate body}{size=\normalsize}
+\setbeamerfont{itemize/enumerate subbody}{size=\normalsize}
+\setbeamerfont{itemize/enumerate subsubbody}{size=\normalsize}
+
+
+% TEMPLATES %
+
+\defbeamertemplate*{frametitle}{machinelearning}{
+    \vskip1.10\TPVertModule
+    \insertframetitle
+    \vskip0.1\TPVertModule
+}
+
+\defbeamertemplate*{uzhlogo}{machinelearning}{
+    \begin{textblock}{14.53}(5.44,3.89)
+        \includegraphics[width=14.53\TPHorizModule]{theme/logo}
+    \end{textblock}
+}
+
+\defbeamertemplate*{title page}{machinelearning}{
+    \begin{textblock}{14.53}(0,0.29)
+        \includegraphics[width=\paperwidth]{theme/header}
+    \end{textblock}
+
+    \begin{textbox}{19.00}{3.81}{3.94}
+        \Large
+        \textbf{Machine Learning - an Interdisciplinary Introduction}
+    \end{textbox}
+
+    \begin{textbox}{19.69}{3.81}{6.94}
+        \large
+        \textbf{Lecture: } \@kapiteltitle
+    \end{textbox}
+}
+
+\defbeamertemplate*{section page}{machinelearning}{
+    \begin{textblock}{14.53}(0,0.29)
+        \includegraphics[width=\paperwidth]{theme/header}
+    \end{textblock}
+
+    \begin{textbox}{19.00}{3.81}{3.94}
+        \Large
+        \textbf{Machine Learning - an Interdisciplinary Introduction}
+    \end{textbox}
+
+    \begin{textbox}{19.69}{3.81}{6.94}
+        \large
+        \textbf{Lecture:} \@kapiteltitle \\[2ex]
+        \textbf{Lesson:} \thesection
+    \end{textbox}
+}
+
+\defbeamertemplate*{video background}{machinelearning}{
+    \setbeamercolor{background canvas}{bg=videobg}
+    \ifoptionfinal{}{
+        \begin{textblock}{11.00}(4.10,0.57)
+            \includegraphics[width=\textwidth]{theme/video_placeholder}
+        \end{textblock}
+    }
+}
+
+\setbeamertemplate{itemize items}{--}
+\setlength{\leftmargini}{1.4\TPHorizModule}
+
+
+\setbeamertemplate{bibliography item}{}
+
+\setbeamertemplate{footline}{
+    \ifoptionfinal{}{
+        \begin{textblock}{16.59}(5.50,11.25)
+            \includegraphics[width=\textwidth]{theme/subtitle_placeholder}
+        \end{textblock}
+    }
+}
+
+\usenavigationsymbolstemplate{}
+
+\mode<all>
